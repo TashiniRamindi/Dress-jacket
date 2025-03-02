@@ -127,11 +127,7 @@ if cloth_type == 'Dress':
         'Water_Repellent': st.radio('Is the dress water repellent?', ('Yes', 'No'), index=None)
     }
 
-    # Preprocess the inputs and predict
-    input_data = preprocess_input_dress(user_input)
-    prediction = model_dress.predict(input_data)
-    st.write(f"The predicted season for the dress is: {
-
+   
 
 # Mapping for seasons
 season_mapping = {0: 'spring', 1: 'summer', 2: 'winter', 3: 'autumn'}
