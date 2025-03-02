@@ -103,7 +103,7 @@ st.title("Cloth Season Prediction App")
 st.write("Please specify whether the cloth is a Jacket or a Dress to predict the season.")
 
 # Ask the user whether it is a jacket or dress
-cloth_type = st.selectbox("Is the cloth a Jacket or a Dress?", ['Select', 'Jacket', 'Dress'])
+cloth_type = st.selectbox("Is the cloth a Jacket or a Dress?", ['Jacket', 'Dress'],index=None)
 
 # Initialize the session state for user inputs if not already set
 if 'user_input' not in st.session_state:
