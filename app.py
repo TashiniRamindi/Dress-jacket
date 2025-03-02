@@ -89,9 +89,9 @@ def preprocess_input_jacket(user_input):
     input_df['Sleeve Length'] = input_df['Sleeve Length'].map(sleeve_length_mapping)
     
     # Add the new features from radio buttons (Yes=1, No=0)
-    input_df['Breathable'] = user_input['Breathable']
-    input_df['Lightweight'] = user_input['Lightweight']
-    input_df['Water_Repellent'] = user_input['Water_Repellent']
+    input_df['Breathable'] = 1 if user_input['Breathable'] == 'Yes' else 0
+    input_df['Lightweight'] = 1 if user_input['Lightweight'] == 'Yes' else 0
+    input_df['Water_Repellent'] = 1 if user_input['Water_Repellent'] == 'Yes' else 0
     
     # Reindex to match the columns the model was trained on
     input_df = input_df.reindex(columns=columns_jacket, fill_value=0)
@@ -140,10 +140,10 @@ if cloth_type == 'Dress':
         'Product Colour': st.selectbox('Product Colour', ['green', 'grey', 'pink', 'brown', 'metallics', 'blue', 'neutral', 'white', 'black', 'orange', 'purple', 'multi_color', 'red', 'yellow'], index=None),
         'Material': st.selectbox('Material', ['Other', 'Synthetic Fibers', 'Wool', 'Silk', 'Luxury Materials', 'Cotton', 'Metallic', 'Knitted and Jersey Materials', 'Leather', 'Polyester'], index=None),
         
-        # Radio buttons for additional features
-        'Breathable': st.radio('Is the dress breathable?', ('Yes', 'No'), index=None),
-        'Lightweight': st.radio('Is the dress lightweight?', ('Yes', 'No'), index=None),
-        'Water_Repellent': st.radio('Is the dress water repellent?', ('Yes', 'No'), index=None)
+        # Additional features
+        'Breathable': st.radio('Is it breathable?', ['Yes', 'No']),
+        'Lightweight': st.radio('Is it lightweight?', ['Yes', 'No']),
+        'Water_Repellent': st.radio('Is it water repellent?', ['Yes', 'No']),
     }
 
 elif cloth_type == 'Jacket':
@@ -151,37 +151,30 @@ elif cloth_type == 'Jacket':
     user_input = {
         'Fit': st.selectbox('Fit', ['regular_fit', 'relaxed_fit', 'slim_fit', 'oversize_fit'], index=None),
         'Length': st.selectbox('Length', ['short', 'medium', 'long'], index=None),
-        'Sleeve Length': st.selectbox('Sleeve Length', ['long_sleeve', 'sleeveless', 'elbow_length'], index=None),
-        'Collar': st.selectbox('Collar', ['point', 'no collar', 'other_collar'], index=None),
-        'Neckline': st.selectbox('Neckline', ['collared_neck', 'hooded', 'funnel_neck', 'other_neck'], index=None),
-        'Hemline': st.selectbox('Hemline', ['ribbed_hem', 'straight_hem', 'other_hem'], index=None),
-        'Style': st.selectbox('Style', ['bomber', 'gilet', 'trucker', 'windbreaker', 'soft_shell', 'sweatshirt', 'puffer', 'other_style', 'harrington', 'rain_jacket', 'parka', 'cargo', 'shirt', 'blazer', 'cocoon', 'sweater', 'barn'], index=None),
-        'Sleeve Style': st.selectbox('Sleeve Style', ['cuff_sleeve', 'plain', 'other_sleeve_style', 'shirt_sleeve', 'puff', 'kimono', 'no_sleeve'], index=None),
-        'Pattern': st.selectbox('Pattern', ['printed', 'solid_or_plain', 'checkered', 'plaid', 'floral_prints', 'camouflage', 'striped', 'other_pattern'], index=None),
-        'Product Colour': st.selectbox('Product Colour', ['grey', 'black', 'blue', 'white', 'green', 'yellow', 'brown', 'red', 'purple'], index=None),
-        'Material': st.selectbox('Material', ['Cotton', 'Polyester', 'Silk', 'Leather', 'Wool', 'Nylon', 'Linen'], index=None),
+        'Sleeve Length': st.selectbox('Sleeve Length', ['sleeveless', 'elbow_length', 'long_sleeve'], index=None),
+        'Collar': st.selectbox('Collar', ['basic', 'peter_pan', 'stand_up', 'cape_collar'], index=None),
+        'Neckline': st.selectbox('Neckline', ['other_neckline', 'collared_neck', 'v_neck', 'high_neck'], index=None),
+        'Hemline': st.selectbox('Hemline', ['straight_hem', 'other_hemline', 'curved_hem'], index=None),
+        'Style': st.selectbox('Style', ['bomber_jacket', 'blazer', 'denim_jacket', 'military_jacket', 'other_style'], index=None),
+        'Sleeve Style': st.selectbox('Sleeve Style', ['long_sleeve', 'short_sleeve', 'no_sleeve'], index=None),
+        'Pattern': st.selectbox('Pattern', ['solid', 'checkered', 'striped'], index=None),
+        'Product Colour': st.selectbox('Product Colour', ['black', 'blue', 'green', 'gray', 'white'], index=None),
+        'Material': st.selectbox('Material', ['Wool', 'Cotton', 'Polyester', 'Silk', 'Leather', 'Denim'], index=None),
         
-        # Radio buttons for additional features
-        'Breathable': st.radio('Is the jacket breathable?', ('Yes', 'No'), index=None),
-        'Lightweight': st.radio('Is the jacket lightweight?', ('Yes', 'No'), index=None),
-        'Water_Repellent': st.radio('Is the jacket water repellent?', ('Yes', 'No'), index=None)
+        # Additional features
+        'Breathable': st.radio('Is it breathable?', ['Yes', 'No']),
+        'Lightweight': st.radio('Is it lightweight?', ['Yes', 'No']),
+        'Water_Repellent': st.radio('Is it water repellent?', ['Yes', 'No']),
     }
 
-# Mapping for seasons
-season_mapping = {0: 'spring', 1: 'summer', 2: 'winter', 3: 'autumn'}
-
-# When the user presses the 'Predict' button
-if st.button("Predict"):
+# Display the input fields
+if st.button('Predict Season'):
     if cloth_type == 'Dress':
         preprocessed_input = preprocess_input_dress(user_input)
         prediction = model_dress.predict(preprocessed_input)
-        # Map the numeric prediction to season name
-        predicted_season = season_mapping[prediction[0]]
-        st.write("The predicted season for this dress is:", predicted_season)
-
     elif cloth_type == 'Jacket':
         preprocessed_input = preprocess_input_jacket(user_input)
         prediction = model_jacket.predict(preprocessed_input)
-        # Map the numeric prediction to season name
-        predicted_season = season_mapping[prediction[0]]
-        st.write("The predicted season for this jacket is:", predicted_season)
+
+    # Show the prediction
+    st.write(f"The predicted season for this {cloth_type.lower()} is: {prediction[0]}")
