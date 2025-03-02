@@ -126,46 +126,43 @@ if 'user_input' not in st.session_state:
 
 # User inputs for dress/jacket features
 if cloth_type == 'Dress':
-    # Dress-related inputs
     user_input = {
-        'Fit': st.selectbox('Fit', ['slim_fit', 'regular_fit', 'relaxed_fit'], index=None),
-        'Length': st.selectbox('Length', ['mini', 'knee', 'midi', 'maxi'], index=None),
-        'Sleeve Length': st.selectbox('Sleeve Length', ['sleeveless', 'short_length', 'elbow_length', 'three_quarter_sleeve', 'long_sleeve'], index=None),
-        'Collar': st.selectbox('Collar', ['shirt_collar', 'Basic', 'other_collar', 'no_collar', 'high_collar', 'polo_collar', 'Ruffled/Decorative'], index=None),
-        'Neckline': st.selectbox('Neckline', ['other_neckline', 'collared_neck', 'off_shoulder', 'v_neck', 'high_neck', 'sweetheart_neck', 'crew_neck', 'square_neck'], index=None),
-        'Hemline': st.selectbox('Hemline', ['curved_hem', 'straight_hem', 'other_hemline', 'asymmetrical_hem', 'flared_hem', 'ruffle_hem'], index=None),
-        'Style': st.selectbox('Style', ['fit_and_flare', 'sundress', 'sweater & jersey', 'other_style', 'shirtdress & tshirt', 'babydoll', 'slip', 'a_line'], index=None),
-        'Sleeve Style': st.selectbox('Sleeve Style', ['ruched', 'cuff', 'ruffle', 'bishop_sleeve', 'plain', 'other_sleeve_style', 'balloon', 'puff', 'kimono', 'no_sleeve', 'cap'], index=None),
-        'Pattern': st.selectbox('Pattern', ['floral_prints', 'animal_prints', 'other', 'multicolor', 'cable_knit', 'printed', 'other_pattern', 'stripes_and_checks', 'solid_or_plain', 'polka_dot'], index=None),
-        'Product Colour': st.selectbox('Product Colour', ['green', 'grey', 'pink', 'brown', 'metallics', 'blue', 'neutral', 'white', 'black', 'orange', 'purple', 'multi_color', 'red', 'yellow'], index=None),
-        'Material': st.selectbox('Material', ['Other', 'Synthetic Fibers', 'Wool', 'Silk', 'Luxury Materials', 'Cotton', 'Metallic', 'Knitted and Jersey Materials', 'Leather', 'Polyester'], index=None),
-        
-        # Additional features
-        'Breathable': st.radio('Is it breathable?', ['Yes', 'No'],index=None),
-        'Lightweight': st.radio('Is it lightweight?', ['Yes', 'No'],index=None),
-        'Water_Repellent': st.radio('Is it water repellent?', ['Yes', 'No'],index=None),
+        'Collar': st.selectbox('Collar', ['shirt_collar', 'Basic', 'other_collar', 'no_collar', 'high_collar', 'polo_collar', 'Ruffled/Decorative'],index=None),
+        'Neckline': st.selectbox('Neckline', ['other_neckline', 'collared_neck', 'off_shoulder', 'v_neck', 'high_neck', 'sweetheart_neck', 'crew_neck', 'square_neck'],index=None),
+        'Hemline': st.selectbox('Hemline', ['curved_hem', 'straight_hem', 'other_hemline', 'asymmetrical_hem', 'flared_hem', 'ruffle_hem'],index=None),
+        'Style': st.selectbox('Style', ['fit_and_flare', 'sundress', 'sweater & jersey', 'other_style', 'shirtdress & tshirt', 'babydoll', 'slip', 'a_line'],index=None),
+        'Fit': st.selectbox('Fit', ['relaxed_fit', 'slim_fit', 'regular_fit'],index=None),
+        'Length': st.selectbox('Length', ['mini', 'midi', 'maxi', 'knee'],index=None),
+        'Sleeve Length': st.selectbox('Sleeve Length', ['long_sleeve', 'three_quarter_sleeve', 'short_length', 'elbow_length', 'sleeveless'],index=None),
+        'Sleeve Style': st.selectbox('Sleeve Style', ['ruched', 'cuff', 'ruffle', 'bishop_sleeve', 'plain', 'other_sleeve_style', 'balloon', 'puff', 'kimono', 'no_sleeve', 'cap'],index=None),
+        'Pattern': st.selectbox('Pattern', ['floral_prints', 'animal_prints', 'other', 'multicolor', 'cable_knit', 'printed', 'other_pattern', 'stripes_and_checks', 'solid_or_plain', 'polka_dot'],index=None),
+        'Material': st.selectbox('Material', ['Other', 'Synthetic Fibers', 'Wool', 'Silk', 'Luxury Materials', 'Cotton', 'Metallic', 'Knitted and Jersey Materials', 'Leather', 'Polyester'],index=None),
+        'Product Colour': st.selectbox('Product Colour', ['green', 'grey', 'pink', 'brown', 'metallics', 'blue', 'neutral', 'white', 'black', 'orange', 'purple', 'multi_color', 'red', 'yellow'],index=None),
+        'Breathable': st.radio("Breathable?", ["Yes", "No"],index=None),
+        'Lightweight': st.radio("Lightweight?", ["Yes", "No"],index=None),
+        'Water_Repellent': st.radio("Water Repellent?", ["Yes", "No"],index=None),
     }
 
+    
+
 elif cloth_type == 'Jacket':
-    # Jacket-related inputs
     user_input = {
-        'Fit': st.selectbox('Fit', ['regular_fit', 'relaxed_fit', 'slim_fit', 'oversize_fit'], index=None),
-        'Length': st.selectbox('Length', ['short', 'medium', 'long'], index=None),
-        'Sleeve Length': st.selectbox('Sleeve Length', ['sleeveless', 'elbow_length', 'long_sleeve'], index=None),
-        'Collar': st.selectbox('Collar', ['basic', 'peter_pan', 'stand_up', 'cape_collar'], index=None),
-        'Neckline': st.selectbox('Neckline', ['other_neckline', 'collared_neck', 'v_neck', 'high_neck'], index=None),
-        'Hemline': st.selectbox('Hemline', ['straight_hem', 'other_hemline', 'curved_hem'], index=None),
-        'Style': st.selectbox('Style', ['bomber_jacket', 'blazer', 'denim_jacket', 'military_jacket', 'other_style'], index=None),
-        'Sleeve Style': st.selectbox('Sleeve Style', ['long_sleeve', 'short_sleeve', 'no_sleeve'], index=None),
-        'Pattern': st.selectbox('Pattern', ['solid', 'checkered', 'striped'], index=None),
-        'Product Colour': st.selectbox('Product Colour', ['black', 'blue', 'green', 'gray', 'white'], index=None),
-        'Material': st.selectbox('Material', ['Wool', 'Cotton', 'Polyester', 'Silk', 'Leather', 'Denim'], index=None),
-        
-        # Additional features
-        'Breathable': st.radio('Is it breathable?', ['Yes', 'No'],index=None),
-        'Lightweight': st.radio('Is it lightweight?', ['Yes', 'No'],index=None),
-        'Water_Repellent': st.radio('Is it water repellent?', ['Yes', 'No'],index=None),
+        'Fit': st.selectbox('Fit', ['regular_fit', 'relaxed_fit', 'slim_fit', 'oversize_fit'],index=None),
+        'Length': st.selectbox('Length', ['short', 'medium', 'long'],index=None),
+        'Sleeve Length': st.selectbox('Sleeve Length', ['long_sleeve', 'sleeveless', 'elbow_length'],index=None),
+        'Collar': st.selectbox('Collar', ['point', 'no collar', 'other_collar'],index=None),
+        'Neckline': st.selectbox('Neckline', ['collared_neck', 'hooded', 'funnel_neck', 'other_neck'],index=None),
+        'Hemline': st.selectbox('Hemline', ['ribbed_hem', 'straight_hem', 'other_hem'],index=None),
+        'Style': st.selectbox('Style', ['bomber', 'gilet', 'trucker', 'windbreaker', 'soft_shell', 'sweatshirt', 'puffer', 'other_style', 'harrington', 'rain_jacket', 'parka', 'cargo', 'shirt', 'blazer', 'cocoon', 'sweater', 'barn'],index=None),
+        'Sleeve Style': st.selectbox('Sleeve Style', ['cuff_sleeve', 'no_sleeve', 'plain_sleeve', 'other_sleeve_style'],index=None),
+        'Pattern': st.selectbox('Pattern', ['solid_or_plain', 'multicolor', 'printed', 'other', 'stripes_and_checks', 'chevron'],index=None),
+        'Product Colour': st.selectbox('Product Colour', ['black', 'grey', 'blue', 'red', 'white', 'brown', 'yellow', 'pink', 'green', 'cream', 'beige', 'purple', 'orange', 'multi_color'],index=None),
+        'Material': st.selectbox('Material', ['Polyamide', 'Cotton', 'Polyester', 'Nylon', 'Other material', 'fleece', 'Wool', 'denim', 'leather', 'faux_fur', 'corduroy', 'rib_knit'],index=None),
+        'Breathable': st.radio("Breathable?", ["Yes", "No"],index=None),
+        'Lightweight': st.radio("Lightweight?", ["Yes", "No"],index=None),
+        'Water_Repellent': st.radio("Water Repellent?", ["Yes", "No"],index=None),
     }
+
 
 # Mapping for seasons
 season_mapping = {0: 'spring', 1: 'summer', 2: 'winter', 3: 'autumn'}
