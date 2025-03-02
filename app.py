@@ -167,14 +167,22 @@ elif cloth_type == 'Jacket':
         'Water_Repellent': st.radio('Is the jacket water repellent?', ('Yes', 'No'), index=None)
     }
 
+# Mapping for seasons
+season_mapping = {0: 'spring', 1: 'summer', 2: 'winter', 3: 'autumn'}
+
 # When the user presses the 'Predict' button
 if st.button("Predict"):
     if cloth_type == 'Dress':
         preprocessed_input = preprocess_input_dress(user_input)
         prediction = model_dress.predict(preprocessed_input)
-        st.write("The predicted season for this dress is:", prediction[0])
+        # Map the numeric prediction to season name
+        predicted_season = season_mapping[prediction[0]]
+        st.write("The predicted season for this dress is:", predicted_season)
 
     elif cloth_type == 'Jacket':
         preprocessed_input = preprocess_input_jacket(user_input)
         prediction = model_jacket.predict(preprocessed_input)
-        st.write("The predicted season for this jacket is:", prediction[0])
+        # Map the numeric prediction to season name
+        predicted_season = season_mapping[prediction[0]]
+        st.write("The predicted season for this jacket is:", predicted_season)
+
