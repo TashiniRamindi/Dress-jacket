@@ -99,7 +99,7 @@ def preprocess_input_jacket(user_input):
     return input_df
 
 # Streamlit app interface
-st.title("Cloth Season Prediction App")
+st.title("Clothing Items Season Prediction App")
 st.write("Please specify whether the cloth is a Jacket or a Dress to predict the season.")
 
 # Ask the user whether it is a jacket or dress
