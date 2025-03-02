@@ -28,10 +28,10 @@ def set_image_top(image_path):
     st.markdown(f'<img src="data:image/jpeg;base64,{base64_str}" style="display:block;margin-left:auto;margin-right:auto;width:80%;">', unsafe_allow_html=True)
 
 # Set the background image
-set_background_image("blue.jpg")  # Background image
+set_background_image("blue.jpg")  # This will be your background image
 
 # Set an image at the top with increased size
-set_image_top("background.jpg")  # Top image file
+set_image_top("background.jpg")  # The top image file, if you have one
 
 # Load the saved models for both jacket and dress
 model_dress = joblib.load("classification_model_dress.pkl")
@@ -59,7 +59,7 @@ def preprocess_input_dress(user_input):
     input_df['Length'] = input_df['Length'].map(length_mapping)
     input_df['Sleeve Length'] = input_df['Sleeve Length'].map(sleeve_length_mapping)
     
-    # Add new features from radio buttons (Yes=1, No=0)
+    # Add the new features from radio buttons (Yes=1, No=0)
     input_df['Breathable'] = 1 if user_input['Breathable'] == 'Yes' else 0
     input_df['Lightweight'] = 1 if user_input['Lightweight'] == 'Yes' else 0
     input_df['Water_Repellent'] = 1 if user_input['Water_Repellent'] == 'Yes' else 0
@@ -88,10 +88,10 @@ def preprocess_input_jacket(user_input):
     input_df['Length'] = input_df['Length'].map(length_mapping)
     input_df['Sleeve Length'] = input_df['Sleeve Length'].map(sleeve_length_mapping)
     
-    # Add new features from radio buttons (Yes=1, No=0)
-    input_df['Breathable'] = 1 if user_input['Breathable'] == 'Yes' else 0
-    input_df['Lightweight'] = 1 if user_input['Lightweight'] == 'Yes' else 0
-    input_df['Water_Repellent'] = 1 if user_input['Water_Repellent'] == 'Yes' else 0
+    # Add the new features from radio buttons (Yes=1, No=0)
+    input_df['Breathable'] = user_input['Breathable']
+    input_df['Lightweight'] = user_input['Lightweight']
+    input_df['Water_Repellent'] = user_input['Water_Repellent']
     
     # Reindex to match the columns the model was trained on
     input_df = input_df.reindex(columns=columns_jacket, fill_value=0)
@@ -103,7 +103,26 @@ st.title("Cloth Season Prediction App")
 st.write("Please specify whether the cloth is a Jacket or a Dress to predict the season.")
 
 # Ask the user whether it is a jacket or dress
-cloth_type = st.selectbox("Is the cloth a Jacket or a Dress?", ['Jacket', 'Dress'], index=None)
+cloth_type = st.selectbox("Is the cloth a Jacket or a Dress?", ['Jacket', 'Dress'],index=None)
+
+# Initialize the session state for user inputs if not already set
+if 'user_input' not in st.session_state:
+    st.session_state.user_input = {
+        'Fit': None,
+        'Length': None,
+        'Sleeve Length': None,
+        'Collar': None,
+        'Neckline': None,
+        'Hemline': None,
+        'Style': None,
+        'Sleeve Style': None,
+        'Pattern': None,
+        'Product Colour': None,
+        'Material': None,
+        'Breathable': None,
+        'Lightweight': None,
+        'Water_Repellent': None,
+    }
 
 # User inputs for dress/jacket features
 if cloth_type == 'Dress':
@@ -127,7 +146,26 @@ if cloth_type == 'Dress':
         'Water_Repellent': st.radio('Is the dress water repellent?', ('Yes', 'No'), index=None)
     }
 
-   
+elif cloth_type == 'Jacket':
+    # Jacket-related inputs
+    user_input = {
+        'Fit': st.selectbox('Fit', ['regular_fit', 'relaxed_fit', 'slim_fit', 'oversize_fit'], index=None),
+        'Length': st.selectbox('Length', ['short', 'medium', 'long'], index=None),
+        'Sleeve Length': st.selectbox('Sleeve Length', ['long_sleeve', 'sleeveless', 'elbow_length'], index=None),
+        'Collar': st.selectbox('Collar', ['point', 'no collar', 'other_collar'], index=None),
+        'Neckline': st.selectbox('Neckline', ['collared_neck', 'hooded', 'funnel_neck', 'other_neck'], index=None),
+        'Hemline': st.selectbox('Hemline', ['ribbed_hem', 'straight_hem', 'other_hem'], index=None),
+        'Style': st.selectbox('Style', ['bomber', 'gilet', 'trucker', 'windbreaker', 'soft_shell', 'sweatshirt', 'puffer', 'other_style', 'harrington', 'rain_jacket', 'parka', 'cargo', 'shirt', 'blazer', 'cocoon', 'sweater', 'barn'], index=None),
+        'Sleeve Style': st.selectbox('Sleeve Style', ['cuff_sleeve', 'plain', 'other_sleeve_style', 'shirt_sleeve', 'puff', 'kimono', 'no_sleeve'], index=None),
+        'Pattern': st.selectbox('Pattern', ['printed', 'solid_or_plain', 'checkered', 'plaid', 'floral_prints', 'camouflage', 'striped', 'other_pattern'], index=None),
+        'Product Colour': st.selectbox('Product Colour', ['grey', 'black', 'blue', 'white', 'green', 'yellow', 'brown', 'red', 'purple'], index=None),
+        'Material': st.selectbox('Material', ['Cotton', 'Polyester', 'Silk', 'Leather', 'Wool', 'Nylon', 'Linen'], index=None),
+        
+        # Radio buttons for additional features
+        'Breathable': st.radio('Is the jacket breathable?', ('Yes', 'No'), index=None),
+        'Lightweight': st.radio('Is the jacket lightweight?', ('Yes', 'No'), index=None),
+        'Water_Repellent': st.radio('Is the jacket water repellent?', ('Yes', 'No'), index=None)
+    }
 
 # Mapping for seasons
 season_mapping = {0: 'spring', 1: 'summer', 2: 'winter', 3: 'autumn'}
@@ -147,4 +185,3 @@ if st.button("Predict"):
         # Map the numeric prediction to season name
         predicted_season = season_mapping[prediction[0]]
         st.write("The predicted season for this jacket is:", predicted_season)
-
