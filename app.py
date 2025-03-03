@@ -1,53 +1,4 @@
-import streamlit as st
-import joblib
-import pandas as pd
-import base64
-
-# Function to load and encode the background image
-def set_background_image(image_file):
-    with open(image_file, "rb") as img:
-        base64_str = base64.b64encode(img.read()).decode()
-    background_css = f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/jpeg;base64,{base64_str}");
-        background-size: cover;
-    }}
-    </style>
-    """
-    st.markdown(background_css, unsafe_allow_html=True)
-
-# Function to load and display a top image with increased size
-def get_base64_image(image_path):
-    with open(image_path, "rb") as image_file:
-        encoded = base64.b64encode(image_file.read()).decode()
-    return encoded
-
-def set_image_top(image_path):
-    base64_str = get_base64_image(image_path)
-    st.markdown(f'<img src="data:image/jpeg;base64,{base64_str}" style="display:block;margin-left:auto;margin-right:auto;width:80%;">', unsafe_allow_html=True)
-
-# Set the background image
-set_background_image("blue.jpg")  # This will be your background image
-
-# Set an image at the top with increased size
-set_image_top("background.jpg")  # The top image file, if you have one
-
-# Load the saved models for both jacket and dress
-model_dress = joblib.load("classification_model_dress.pkl")
-model_jacket = joblib.load("classification_model_jacket.pkl")
-
-columns_dress = joblib.load("dress_X_train.pkl")
-columns_jacket = joblib.load("jacket_X_train.pkl")
-
-# Function to preprocess inputs for dress data
-def preprocess_input_dress(user_input):
-    # One-Hot Encoding for categorical columns for dress
-    dummy_cols = ['Collar', 'Neckline', 'Hemline', 'Style', 'Sleeve Style', 'Pattern', 'Product Colour', 'Material']
-    input_df = pd.DataFrame([user_input], columns=user_input.keys())
-    
-    input_dummies = pd.get_dummies(input_df[dummy_cols], drop_first=True)
-    input_df = pd.concat([input_df, input_dummies], axis=1)
+a
     input_df = input_df.drop(columns=dummy_cols)
     
     # Ordinal Encoding for specific columns for dress
@@ -128,16 +79,16 @@ if 'user_input' not in st.session_state:
 # User inputs for dress/jacket features
 if cloth_type == 'Dress':
     user_input = {
-        'Collar': st.selectbox('What type of collar does the dress have?', ['shirt_collar', 'Basic', 'other_collar', 'no_collar', 'high_collar', 'polo_collar', 'Ruffled/Decorative'],index=None),
-        'Neckline': st.selectbox('What type of neckline does the dress have?', ['other_neckline', 'collared_neck', 'off_shoulder', 'v_neck', 'high_neck', 'sweetheart_neck', 'crew_neck', 'square_neck'],index=None),
-        'Hemline': st.selectbox('What type of hemline does the dress have?', ['curved_hem', 'straight_hem', 'other_hemline', 'asymmetrical_hem', 'flared_hem', 'ruffle_hem'],index=None),
-        'Style': st.selectbox('What style is the dress?', ['fit_and_flare', 'sundress', 'sweater & jersey', 'other_style', 'shirtdress & tshirt', 'babydoll', 'slip', 'a_line'],index=None),
+        'Collar': st.selectbox('What type of collar does the dress have?', ['shirt_collar', 'Basic', 'no_collar', 'high_collar', 'polo_collar', 'Ruffled/Decorative','other_collar'],index=None),
+        'Neckline': st.selectbox('What type of neckline does the dress have?', ['collared_neck', 'off_shoulder', 'v_neck', 'high_neck', 'sweetheart_neck', 'crew_neck', 'square_neck', 'other_neckline'],index=None),
+        'Hemline': st.selectbox('What type of hemline does the dress have?', ['curved_hem', 'straight_hem', 'asymmetrical_hem', 'flared_hem', 'ruffle_hem','other_hemline'],index=None),
+        'Style': st.selectbox('What style is the dress?', ['fit_and_flare', 'sundress', 'sweater & jersey', 'shirtdress & tshirt', 'babydoll', 'slip', 'a_line','other_style'],index=None),
         'Fit': st.selectbox('What is the fit of the dress?', ['relaxed_fit', 'slim_fit', 'regular_fit'],index=None),
         'Length': st.selectbox('What is the length of the dress?', ['mini', 'midi', 'maxi', 'knee'],index=None),
         'Sleeve Length': st.selectbox('What sleeve length does the dress have?', ['long_sleeve', 'three_quarter_sleeve', 'short_length', 'elbow_length', 'sleeveless'],index=None),
-        'Sleeve Style': st.selectbox('What sleeve style does the dress have?', ['ruched', 'cuff', 'ruffle', 'bishop_sleeve', 'plain', 'other_sleeve_style', 'balloon', 'puff', 'kimono', 'no_sleeve', 'cap'],index=None),
-        'Pattern': st.selectbox('What pattern does the dress have?', ['floral_prints', 'animal_prints', 'other', 'multicolor', 'cable_knit', 'printed', 'other_pattern', 'stripes_and_checks', 'solid_or_plain', 'polka_dot'],index=None),
-        'Material': st.selectbox('What material is the dress made from?', ['Other', 'Synthetic Fibers', 'Wool', 'Silk', 'Luxury Materials', 'Cotton', 'Metallic', 'Knitted and Jersey Materials', 'Leather', 'Polyester'],index=None),
+        'Sleeve Style': st.selectbox('What sleeve style does the dress have?', ['ruched', 'cuff', 'ruffle', 'bishop_sleeve', 'plain', 'balloon', 'puff', 'kimono', 'no_sleeve', 'cap', 'other_sleeve_style'],index=None),
+        'Pattern': st.selectbox('What pattern does the dress have?', ['floral_prints', 'animal_prints','multicolor', 'cable_knit', 'printed','stripes_and_checks', 'solid_or_plain', 'polka_dot','other_pattern'],index=None),
+        'Material': st.selectbox('What material is the dress made from?', ['Synthetic Fibers', 'Wool', 'Silk', 'Luxury Materials', 'Cotton', 'Metallic', 'Knitted and Jersey Materials', 'Leather', 'Polyester','Other'],index=None),
         'Product Colour': st.selectbox('What color is the dress?', ['green', 'grey', 'pink', 'brown', 'metallics', 'blue', 'neutral', 'white', 'black', 'orange', 'purple', 'multi_color', 'red', 'yellow'],index=None),
         'Breathable': st.radio("Is the dress breathable?", ["Yes", "No"],index=None),
         'Lightweight': st.radio("Is the dress lightweight?", ["Yes", "No"],index=None),
@@ -148,20 +99,21 @@ if cloth_type == 'Dress':
     
 elif cloth_type == 'Jacket':
     user_input = {
-        'Fit': st.selectbox('What is the fit of the jacket?', ['regular_fit', 'relaxed_fit', 'slim_fit', 'oversize_fit'],index=None),
-        'Length': st.selectbox('What is the length of the jacket?', ['short', 'medium', 'long'],index=None),
-        'Sleeve Length': st.selectbox('What sleeve length does the jacket have?', ['long_sleeve', 'sleeveless', 'elbow_length'],index=None),
-        'Collar': st.selectbox('What type of collar does the jacket have?', ['point', 'no collar', 'other_collar'],index=None),
-        'Neckline': st.selectbox('What type of neckline does the jacket have?', ['collared_neck', 'hooded', 'funnel_neck', 'other_neck'],index=None),
-        'Hemline': st.selectbox('What type of hemline does the jacket have?', ['ribbed_hem', 'straight_hem', 'other_hem'],index=None),
-        'Style': st.selectbox('What style is the jacket?', ['bomber', 'gilet', 'trucker', 'windbreaker', 'soft_shell', 'sweatshirt', 'puffer', 'other_style', 'harrington', 'rain_jacket', 'parka', 'cargo', 'shirt', 'blazer', 'cocoon', 'sweater', 'barn'],index=None),
-        'Sleeve Style': st.selectbox('What sleeve style does the jacket have?', ['cuff_sleeve', 'no_sleeve', 'plain_sleeve', 'other_sleeve_style'],index=None),
-        'Pattern': st.selectbox('What pattern does the jacket have?', ['solid_or_plain', 'multicolor', 'printed', 'other', 'stripes_and_checks', 'chevron'],index=None),
-        'Product Colour': st.selectbox('What color is the jacket?', ['black', 'grey', 'blue', 'red', 'white', 'brown', 'yellow', 'pink', 'green', 'cream', 'beige', 'purple', 'orange', 'multi_color'],index=None),
-        'Material': st.selectbox('What material is the jacket made from?', ['Polyamide', 'Cotton', 'Polyester', 'Nylon', 'Other material', 'fleece', 'Wool', 'denim', 'leather', 'faux_fur', 'corduroy', 'rib_knit'],index=None),
-        'Breathable': st.radio("Is the jacket breathable?", ["Yes", "No"],index=None),
-        'Lightweight': st.radio("Is the jacket lightweight?", ["Yes", "No"],index=None),
-        'Water_Repellent': st.radio("Is the jacket water repellent?", ["Yes", "No"],index=None),
+        'Outerwear Type': st.selectbox('What type of outerwear is this?', ['jacket', 'vest', 'coat'], index=None),
+        'Fit': st.selectbox('What is the fit of the jacket?', ['regular_fit', 'relaxed_fit', 'slim_fit', 'oversize_fit'], index=None),
+        'Length': st.selectbox('What is the length of the jacket?', ['short', 'medium', 'long'], index=None),
+        'Sleeve Length': st.selectbox('What sleeve length does the jacket have?', ['long_sleeve', 'sleeveless', 'elbow_length'], index=None),
+        'Collar': st.selectbox('What type of collar does the jacket have?', ['point', 'no collar', 'band', 'notch', 'lapel','other_collar'], index=None),
+        'Neckline': st.selectbox('What type of neckline does the jacket have?', ['collared_neck', 'hooded', 'funnel_neck', 'v_neck', 'other_neck'], index=None),
+        'Hemline': st.selectbox('What type of hemline does the jacket have?', ['ribbed_hem', 'straight_hem', 'other_hem'], index=None),
+        'Style': st.selectbox('What style is the jacket?', ['bomber', 'gilet', 'trucker', 'windbreaker', 'soft_shell', 'sweatshirt', 'puffer', 'other_style', 'harrington', 'rain_jacket', 'parka', 'cargo', 'shirt', 'trench', 'blazer', 'cocoon', 'anorak', 'overcoat', 'peacoat', 'hardshell', 'barn','other_style'], index=None),
+        'Sleeve Style': st.selectbox('What sleeve style does the jacket have?', ['cuff_sleeve', 'no_sleeve', 'plain_sleeve', 'raglan_sleeve','other_sleeve_style'], index=None),
+        'Pattern': st.selectbox('What pattern does the jacket have?', ['solid_or_plain', 'multicolor', 'printed','plaid', 'cable_knit', 'tie_dry', 'houndstooth', 'chevron','other'], index=None),
+        'Product Colour': st.selectbox('What color is the jacket?', ['black', 'grey', 'blue', 'red', 'white', 'brown', 'yellow', 'pink', 'green', 'cream', 'beige', 'purple', 'orange', 'multi_color'], index=None),
+        'Material': st.selectbox('What material is the jacket made from?', ['Polyamide', 'Cotton', 'Polyester', 'Nylon',  'fleece', 'Wool', 'denim', 'leather', 'faux_fur', 'corduroy', 'rib_knit', 'Other material'], index=None),
+        'Breathable': st.radio("Is the jacket breathable?", ["Yes", "No"], index=None),
+        'Lightweight': st.radio("Is the jacket lightweight?", ["Yes", "No"], index=None),
+        'Water Repellent': st.radio("Is the jacket water repellent?", ["Yes", "No"], index=None),
     }
 
 
