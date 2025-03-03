@@ -1,4 +1,53 @@
-a
+import streamlit as st
+import joblib
+import pandas as pd
+import base64
+
+# Function to load and encode the background image
+def set_background_image(image_file):
+    with open(image_file, "rb") as img:
+        base64_str = base64.b64encode(img.read()).decode()
+    background_css = f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpeg;base64,{base64_str}");
+        background-size: cover;
+    }}
+    </style>
+    """
+    st.markdown(background_css, unsafe_allow_html=True)
+
+# Function to load and display a top image with increased size
+def get_base64_image(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded = base64.b64encode(image_file.read()).decode()
+    return encoded
+
+def set_image_top(image_path):
+    base64_str = get_base64_image(image_path)
+    st.markdown(f'<img src="data:image/jpeg;base64,{base64_str}" style="display:block;margin-left:auto;margin-right:auto;width:80%;">', unsafe_allow_html=True)
+
+# Set the background image
+set_background_image("blue.jpg")  # Background image
+
+# Set an image at the top with increased size
+set_image_top("background.jpg")  # Top image file
+
+# Load the saved models for both jacket and dress
+model_dress = joblib.load("classification_model_dress.pkl")
+model_jacket = joblib.load("classification_model_jacket.pkl")
+
+columns_dress = joblib.load("dress_X_train.pkl")
+columns_jacket = joblib.load("jacket_X_train.pkl")
+
+# Function to preprocess inputs for dress data
+def preprocess_input_dress(user_input):
+    # One-Hot Encoding for categorical columns for dress
+    dummy_cols = ['Collar', 'Neckline', 'Hemline', 'Style', 'Sleeve Style', 'Pattern', 'Product Colour', 'Material']
+    input_df = pd.DataFrame([user_input], columns=user_input.keys())
+    
+    input_dummies = pd.get_dummies(input_df[dummy_cols], drop_first=True)
+    input_df = pd.concat([input_df, input_dummies], axis=1)
     input_df = input_df.drop(columns=dummy_cols)
     
     # Ordinal Encoding for specific columns for dress
@@ -10,7 +59,7 @@ a
     input_df['Length'] = input_df['Length'].map(length_mapping)
     input_df['Sleeve Length'] = input_df['Sleeve Length'].map(sleeve_length_mapping)
     
-    # Add the new features from radio buttons (Yes=1, No=0)
+    # Add new features from radio buttons (Yes=1, No=0)
     input_df['Breathable'] = 1 if user_input['Breathable'] == 'Yes' else 0
     input_df['Lightweight'] = 1 if user_input['Lightweight'] == 'Yes' else 0
     input_df['Water_Repellent'] = 1 if user_input['Water_Repellent'] == 'Yes' else 0
@@ -39,7 +88,7 @@ def preprocess_input_jacket(user_input):
     input_df['Length'] = input_df['Length'].map(length_mapping)
     input_df['Sleeve Length'] = input_df['Sleeve Length'].map(sleeve_length_mapping)
     
-    # Add the new features from radio buttons (Yes=1, No=0)
+    # Add new features from radio buttons (Yes=1, No=0)
     input_df['Breathable'] = 1 if user_input['Breathable'] == 'Yes' else 0
     input_df['Lightweight'] = 1 if user_input['Lightweight'] == 'Yes' else 0
     input_df['Water_Repellent'] = 1 if user_input['Water_Repellent'] == 'Yes' else 0
@@ -50,31 +99,14 @@ def preprocess_input_jacket(user_input):
     return input_df
 
 # Streamlit app interface
-st.title("Season Prediction App", anchor="top")
-st.markdown("<h4 style='text-align: center;'>Predict the Season for a Dress or Jacket</h4>", unsafe_allow_html=True)
-st.write("This app predicts the most likely season (Spring, Summer, Autumn, Winter) based on the type of clothing you provide.")
+st.title("Cloth Season Prediction App")
+st.write("Please specify whether the cloth is a Jacket or a Dress to predict the season.")
 
 # Ask the user whether it is a jacket or dress
-cloth_type = st.selectbox("Is the cloth a Jacket or a Dress?", ['Jacket', 'Dress'],index=None)
+cloth_type = st.selectbox("Is the cloth a Jacket or a Dress?", ['Jacket', 'Dress'], index=None)
 
-# Initialize the session state for user inputs if not already set
-if 'user_input' not in st.session_state:
-    st.session_state.user_input = {
-        'Fit': None,
-        'Length': None,
-        'Sleeve Length': None,
-        'Collar': None,
-        'Neckline': None,
-        'Hemline': None,
-        'Style': None,
-        'Sleeve Style': None,
-        'Pattern': None,
-        'Product Colour': None,
-        'Material': None,
-        'Breathable': None,
-        'Lightweight': None,
-        'Water_Repellent': None,
-    }
+# User inputs for dress/jacket features
+if cloth_type == 'Dress':
 
 # User inputs for dress/jacket features
 if cloth_type == 'Dress':
