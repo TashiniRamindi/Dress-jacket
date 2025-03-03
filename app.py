@@ -142,9 +142,12 @@ elif cloth_type == 'Jacket':
         'Pattern': st.selectbox('What pattern does the jacket have?', ['solid_or_plain', 'multicolor', 'printed','plaid', 'cable_knit', 'tie_dry', 'houndstooth', 'chevron','other'], index=None),
         'Product Colour': st.selectbox('What color is the jacket?', ['black', 'grey', 'blue', 'red', 'white', 'brown', 'yellow', 'pink', 'green', 'cream', 'beige', 'purple', 'orange', 'multi_color'], index=None),
         'Material': st.selectbox('What material is the jacket made from?', ['Polyamide', 'Cotton', 'Polyester', 'Nylon',  'fleece', 'Wool', 'denim', 'leather', 'faux_fur', 'corduroy', 'rib_knit', 'Other material'], index=None),
-        'Breathable': st.radio("Is the jacket breathable?", ["Yes", "No"], index=None),
-        'Lightweight': st.radio("Is the jacket lightweight?", ["Yes", "No"], index=None),
-        'Water Repellent': st.radio("Is the jacket water repellent?", ["Yes", "No"], index=None)
+
+        # Radio buttons for additional features
+        'Breathable': st.radio('Is the jacket breathable?', ('Yes', 'No'), index=None),
+        'Lightweight': st.radio('Is the jacket lightweight?', ('Yes', 'No'), index=None),
+        'Water_Repellent': st.radio('Is the jacket water repellent?', ('Yes', 'No'), index=None)
+    }
     }
 
 
