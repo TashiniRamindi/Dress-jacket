@@ -107,9 +107,6 @@ cloth_type = st.selectbox("Is the cloth a Jacket or a Dress?", ['Jacket', 'Dress
 
 # User inputs for dress/jacket features
 if cloth_type == 'Dress':
-
-# User inputs for dress/jacket features
-if cloth_type == 'Dress':
     user_input = {
         'Collar': st.selectbox('What type of collar does the dress have?', ['shirt_collar', 'Basic', 'no_collar', 'high_collar', 'polo_collar', 'Ruffled/Decorative','other_collar'],index=None),
         'Neckline': st.selectbox('What type of neckline does the dress have?', ['collared_neck', 'off_shoulder', 'v_neck', 'high_neck', 'sweetheart_neck', 'crew_neck', 'square_neck', 'other_neckline'],index=None),
